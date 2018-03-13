@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hncj.bs.mapper.LogMapper">
+	<resultMap type="com.hncj.bs.domain.Log" id="logRM">
+		<id property="id" column="LOG_ID"/>
+		<result property="logtime" column="LOG_TIME"/>
+		<result property="logtext" column="LOG_TEXT"/>
+	</resultMap>
+	
+	
+	<select id="find" parameterType="map" resultMap="logRM">
+	     	select * from log_b
+	     	where 1=1
+	</select>
+	
+	<select id="get" parameterType="string" resultMap="logRM">
+	     	select * from log_b
+	     	where log_id=#{pid}
+	</select>
+	
+	<insert id="insert" parameterType="com.hncj.bs.domain.Log">
+         insert into log_b
+		(LOG_ID,LOG_TIME,LOG_TEXT)
+		values
+		(
+			#{id},
+			#{logtime, jdbcType=TIMESTAMP},
+			#{logtext, jdbcType=VARCHAR}
+		)
+     </insert>
+     
+     <update id="update" parameterType="com.hncj.bs.domain.Log">
+           update log_b
+           <set>
+              <if test="logtime != null">LOG_TIME=#{logtime},</if>
+			  <if test="logtext != null">LOG_TEXT=#{logtext},</if>
+           </set>
+           where log_id=#{id}
+     </update>
+     
+      <!-- 删除一条 -->
+	<delete id="deleteById" parameterType="string">
+		delete from log_b
+		where log_id=#{pid}
+	</delete>
+	
+	
+</mapper>

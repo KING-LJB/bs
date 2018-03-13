@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hncj.bs.mapper.LoginLogMapper">
+	<resultMap type="com.hncj.bs.domain.LoginLog" id="loginLogRM">
+		<id property="id" column="LOGIN_LOG_ID"/>
+		<result property="loginname" column="LOGIN_NAME"/>
+		<result property="ipaddress" column="IP_ADDRESS"/>
+		<result property="logintime" column="LOGIN_TIME"/>
+	</resultMap>
+	
+	
+	<select id="find" parameterType="map" resultMap="loginLogRM">
+	     	select * from login_log_p
+	     	where 1=1
+	</select>
+	
+	<select id="get" parameterType="string" resultMap="loginLogRM">
+	     	select * from login_log_p
+	     	where login_log_id=#{pid}
+	</select>
+	
+	<insert id="insert" parameterType="com.hncj.bs.domain.LoginLog">
+         insert into login_log_p
+		(LOGIN_LOG_ID,LOGIN_NAME,IP_ADDRESS,LOGIN_TIME)
+		values
+		(
+			#{id},
+			#{loginname,jdbcType=VARCHAR},
+			#{ipaddress, jdbcType=VARCHAR},
+			#{logintime, jdbcType=TIMESTAMP}
+		)
+     </insert>
+     
+     <update id="update" parameterType="com.hncj.bs.domain.LoginLog">
+           update login_log_p
+           <set>
+	          <if test="loginname != null">LOGIN_NAME=#{loginname},</if>
+	          <if test="ipaddress != null">IP_ADDRESS=#{ipaddress},</if>
+              <if test="logintime != null">LOGIN_TIME=#{logintime},</if>
+           </set>
+           where login_log_id=#{id}
+     </update>
+     
+      <!-- 删除一条 -->
+	<delete id="deleteById" parameterType="string">
+		delete from login_log_p
+		where login_log_id=#{pid}
+	</delete>
+	
+	
+</mapper>

@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hncj.bs.mapper.UserMapper">
+	<resultMap type="com.hncj.bs.domain.User" id="userRM">
+		<id property="id" column="USER_ID"/>
+		<result property="username" column="USERNAME"/>
+		<result property="password" column="PASSWORD"/>
+		<result property="salary" column="SALARY"/>
+		<result property="birthday" column="BIRTHDAY"/>
+		<result property="gender" column="GENDER"/>
+		<result property="station" column="STATION"/>
+		<result property="telephone" column="TELEPHONE"/>
+		<result property="remark" column="REMARK"/>
+	</resultMap>
+	
+	<select id="find" parameterType="map" resultMap="userRM">
+		select * from USER_P
+	</select>
+	
+	<!-- 通过登录名查询用户信息 -->
+	<select id="getByUsername" parameterType="string" resultMap="userRM">
+		select * from USER_P
+		where USERNAME=#{username}
+	</select>
+	
+	<select id="get" parameterType="string" resultMap="userRM">
+		select * from USER_P
+		where user_id=#{pid}
+	</select>
+	
+	<insert id="insert" parameterType="com.hncj.bs.domain.User">
+	   insert into user_p
+	   (USER_ID,USERNAME,PASSWORD,SALARY,BIRTHDAY,GENDER,STATION,TELEPHONE,REMARK)
+	   values
+	   (
+	      #{id},
+	      #{username, jdbcType=VARCHAR},
+	      #{password, jdbcType=VARCHAR},
+	      #{salary, jdbcType=DOUBLE},
+	      #{birthday, jdbcType=TIMESTAMP},
+	      #{gender, jdbcType=VARCHAR},
+	      #{station, jdbcType=VARCHAR},
+	      #{telephone, jdbcType=VARCHAR},
+	      #{remark, jdbcType=VARCHAR}
+	   )
+	</insert>
+	
+	<update id="update" parameterType="com.hncj.bs.domain.User">
+	    update user_p
+	     <set>
+	     	<if test="username != null">USERNAME=#{username},</if>
+	     	<if test="password != null">PASSWORD=#{password},</if>
+	     	<if test="salary != null">SALARY=#{salary},</if>
+	     	<if test="birthday != null">BIRTHDAY=#{birthday},</if>
+	     	<if test="gender != null">GENDER=#{gender},</if>
+	     	<if test="station != null">STATION=#{station},</if>
+	     	<if test="telephone != null">TELEPHONE=#{telephone},</if>
+	     	<if test="remark != null">REMARK=#{remark},</if>
+	     </set>
+	    where user_id=#{id}
+	</update>
+	
+	 <!-- 删除一条 -->
+    <delete id="deleteById" parameterType="string">
+         delete from user_p
+         where user_id=#{pid}
+    </delete>
+    
+    <!-- 批量删除   （一维字符串数组）-->
+    <delete id="delete" parameterType="string">
+        delete from user_p
+        where user_id in
+        <foreach collection="array" item="id" open="(" close=")" separator=",">
+            #{id}
+        </foreach>
+    </delete>
+	
+</mapper>
